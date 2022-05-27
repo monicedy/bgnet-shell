@@ -2,16 +2,18 @@ TITLE="【BG-NET】"
 SLP=4
 
 paraFlag=0
-AcctPath='info.conf'
+# acctInfo=""
+acctPath='info.conf'
+acctInfo=`cat $acctPath`
 
 getAccts(){
-        acctNum=`awk -F ';' '{print $1}' $AcctPath`
+        acctNum=`echo $acctInfo | awk -F ';' '{print $1}'`
         t=$(date +%s)
         rdn=`expr $t % $acctNum`
-        rdn=`expr $rdn + 2`    
-            
-        acct=`awk -F ';' -v n=$rdn '{print $n}' $AcctPath| awk -F ',' '{print $1}'`
-        pswd=`awk -F ';' -v n=$rdn '{print $n}' $AcctPath| awk -F ',' '{print $2}'`
+        rdn=`expr $rdn + 2`
+
+        acct=`echo $acctInfo | awk -F ';' -v n=$rdn '{print $n}' | awk -F ',' '{print $1}'`
+        pswd=`echo $acctInfo | awk -F ';' -v n=$rdn '{print $n}' | awk -F ',' '{print $2}'`
         d3="&R1=0&R2=0&R3=0&R6=0&para=00&0MKKey=123456"
         d2="&upass="$pswd
         d1="DDDDD=,0,"$acct
@@ -64,7 +66,7 @@ login(){
 
     curl -d $postData $postUrl
     sleep 3
-    log "acct: "$acct", pswd: "$pswd
+   #  log "acct: "$acct", pswd: "$pswd
 }
 
 dynSlp(){
@@ -74,7 +76,7 @@ dynSlp(){
         getAccts
         curl -d $postData $postUrl
         log "reconn..."
-        log "acct: "$acct", pswd: "$pswd
+      #   log "acct: "$acct", pswd: "$pswd
 
         checkPing
         if [ $? -eq 0 ]
@@ -120,7 +122,7 @@ main(){
                     reConnWifi
                 else
                     log "Connected !"
-                fi                
+                fi
             fi
         fi
     done

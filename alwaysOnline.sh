@@ -1,4 +1,4 @@
-TITLE="【BG-NET】"
+TITLE="[BG-NET]"
 SLP=4
 
 paraFlag=0
@@ -40,12 +40,16 @@ getParas(){
         postUrl="http://192.168.7.221:801/eportal/?c=ACSetting&a=Login&protocol=http:&hostname=192.168.7.221&iTermType=1&wlanuserip="$wlanuserip"&wlanacip="$wlanacip"&wlanacname="$wlanacname"&mac="$wlanusermac"&ip="$wlanuserip"&enAdvert=0&queryACIP=0&loginMethod=1"
 }
 
-checkPing(){
-    ping www.baidu.com -c 2 -w 6 -W 6 > /dev/null
+updateTime(){
+    #curTime=$(date "+%m.%d-%H:%M:%S")
+    curTime=$(date "+%H:%M:%S")
 }
 
-updateTime(){
-    curTime=$(date "+%m.%d %H:%M:%S")
+checkPing(){
+    updateTime
+    beginPing=$curTime
+    ping www.baidu.com -c 2 -w 5 -W 5 > /dev/null
+    # ping www.baidu.com -c 2 -w 6 -W 6 > /dev/null
 }
 
 log(){
@@ -101,7 +105,9 @@ main(){
             then
             sleep $SLP
         else
-            log "ReConnect"
+            log "ReConnect..."
+            msg="PingStartAt_"$beginPing
+            log $msg
             login
             if [ $? -eq 1 ]
                 then
@@ -112,7 +118,7 @@ main(){
             checkPing
             if [ $? -eq 0 ]
                 then
-                log "Connected !"
+                log "ConnSuccess!"
             else
                 log "DynReconn: 40s left"
                 dynSlp 40
@@ -121,7 +127,7 @@ main(){
                     log "REBOOT NOW!"
                     reConnWifi
                 else
-                    log "Connected !"
+                    log "ConnSuccess !"
                 fi
             fi
         fi

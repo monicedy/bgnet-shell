@@ -25,7 +25,7 @@ getParas(){
         then
             return 0
         fi
-        res=`curl -Ls -w %{url_effective} -o /dev/null http://1.1.1.1`
+        res=`curl --time-out 5 -Ls -w %{url_effective} -o /dev/null http://1.1.1.1`
         stat=`echo $res | grep 1.1.1.1`
         if [ $? -eq 0 ]
             then
@@ -41,7 +41,8 @@ getParas(){
 }
 
 checkPing(){
-    ping www.baidu.com -c 2 -w 6 -W 6 > /dev/null
+    ping www.baidu.com -c 2 -w 6 -W 6 > /dev/null ## router version
+    # ping www.baidu.com -c 2 -t 3 > /dev/null ## mac version
 }
 
 updateTime(){

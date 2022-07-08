@@ -25,7 +25,7 @@ getParas(){
         then
             return 0
         fi
-        res=`curl --time-out 5 -Ls -w %{url_effective} -o /dev/null http://1.1.1.1`
+        res=`curl -time-out 5 -Ls -w %{url_effective} -o /dev/null http://1.1.1.1`
         stat=`echo $res | grep 1.1.1.1`
         if [ $? -eq 0 ]
             then

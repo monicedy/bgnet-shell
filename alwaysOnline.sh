@@ -1,6 +1,8 @@
 TITLE="【BG-NET】"
 SLP=4
 
+TIMEOUT_PING=3
+TIMEOUT_PARA=5
 paraFlag=0
 # acctInfo=""
 acctPath='info.conf'
@@ -25,7 +27,7 @@ getParas(){
         then
             return 0
         fi
-        res=`curl -time-out 5 -Ls -w %{url_effective} -o /dev/null http://1.1.1.1`
+        res=`curl -Ls -w %{url_effective} -o /dev/null http://1.1.1.1 -time-out $TIMEOUT_PARA `
         stat=`echo $res | grep 1.1.1.1`
         if [ $? -eq 0 ]
             then
@@ -41,7 +43,7 @@ getParas(){
 }
 
 checkPing(){
-    ping www.baidu.com -c 2 -w 6 -W 6 > /dev/null ## router version
+    ping www.baidu.com -c 1 -w $TIMEOUT_PING -W $TIMEOUT_PING > /dev/null ## router version
     # ping www.baidu.com -c 2 -t 3 > /dev/null ## mac version
 }
 
